@@ -1,3 +1,5 @@
+The Swagger documentation will be in `/api-docs`
+
 
 ## Running in minikube
 ```bash
@@ -6,6 +8,8 @@ cd ./k8s
 
 192.168.99.100:30100  #Ip of server
 ```
+
+
 
 
 ## Based on:
