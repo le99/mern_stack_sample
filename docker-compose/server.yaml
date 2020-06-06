@@ -1,0 +1,27 @@
+version: '2'
+
+# networks:
+#   net_test:
+#     external: true
+
+services:
+  mearn:
+    container_name: mearn
+    image: node:10
+    # image: busybox:1.31.1
+    stdin_open: true  #comment this and the following to run server
+    tty: true
+    working_dir: /usr/src/app
+    user: ${CURRENT_UID}
+    command: "npm start"
+    environment:
+      - LOCAL=false
+    volumes:
+      - ../server/:/usr/src/app
+    ports:
+      - "3000:3000"
+    # networks:
+    #   - net_test
+
+    #extra_hosts:
+      #- "peer:127.0.0.1"
