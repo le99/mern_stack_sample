@@ -3,30 +3,35 @@
 
 FROM node:10 as build
 
-WORKDIR /app
-
+WORKDIR /app/client
 COPY ./client/package*.json ./
 
+WORKDIR /app/server
+COPY ./server/package*.json ./
+
+
+WORKDIR /app/client
 RUN npm install --loglevel verbose
 
-COPY ./client .
+WORKDIR /app/server
+RUN npm install --loglevel verbose
 
+
+WORKDIR /app/client
+COPY ./client .
 RUN npm run build
+
+WORKDIR /app/server
+COPY ./server .
 
 
 FROM node:10
 
 WORKDIR /usr/src/app
 
-COPY ./server/package*.json ./
-
-RUN npm install --loglevel verbose
-
 COPY ./server .
-COPY --from=build /app/build/ ./public
-
-
-# COPY --from=build /app/package.json ./public/
+COPY --from=build /app/server/ .
+COPY --from=build /app/client/build/ ./public
 
 EXPOSE 3001
 
