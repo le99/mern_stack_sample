@@ -17,7 +17,7 @@ services:
     environment:
       - LOCAL=false
     volumes:
-      - ../server/:/usr/src/app
+      - ../app/server/:/usr/src/app
     ports:
       - "3001:3001"
     # networks:

@@ -17,21 +17,20 @@ WORKDIR /app/server
 RUN npm install --loglevel verbose
 
 
+WORKDIR /app/server
+COPY ./server .
+
 WORKDIR /app/client
 COPY ./client .
 RUN npm run build
 
-WORKDIR /app/server
-COPY ./server .
 
 
 FROM node:10
 
 WORKDIR /usr/src/app
 
-COPY ./server .
 COPY --from=build /app/server/ .
-COPY --from=build /app/client/build/ ./public
 
 EXPOSE 3001
 
