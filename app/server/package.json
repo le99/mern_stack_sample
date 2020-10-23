@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon -e .yaml ./bin/www"
   },
   "dependencies": {
     "@godaddy/terminus": "^4.4.1",

@@ -47,10 +47,24 @@ function onShutdown () {
 
 createTerminus(server, {
   timeout: 2000,//ms
-  signals:['SIGUSER2', 'SIGINT', 'SIGTERM'],
+  signals:['SIGINT', 'SIGTERM'],
   onSignal,
   onShutdown
 });
+
+
+// Nodemon
+process.once('SIGUSR2', function(){
+  onSignal().then(()=>{
+    onShutdown();
+    return;
+  })
+    .then(() => {
+      console.log('hey>>>>');
+      process.kill(process.pid, 'SIGUSR2');
+    });
+});
+
 
 /**
  * Listen on provided port, on all network interfaces.
