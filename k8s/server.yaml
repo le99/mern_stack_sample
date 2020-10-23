@@ -57,3 +57,6 @@ spec:
           env:
            - name: LOCAL
              value: "false"
+           - name: NODE_ENV
+             value: "production
+"

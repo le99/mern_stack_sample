@@ -9,6 +9,7 @@ require('dotenv').config()
 var app = require('../app');
 var debug = require('debug')('mearn:server');
 var http = require('http');
+const { createTerminus } = require('@godaddy/terminus');
 
 /**
  * Get port from environment and store in Express.
@@ -16,6 +17,8 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '3000');
 console.log('Listening on PORT: ' + port);
+console.log('Swagger:', '/api-docs');
+
 app.set('port', port);
 
 /**
@@ -31,32 +34,22 @@ var server = http.createServer(app);
 // Shutdown
 //-------------------------
 
-function shutdown(){
+function onSignal(){
   console.log('Release db connections, etc');
   return Promise.all([
     Promise.resolve()
   ]);
 }
 
-//Nodemon
-process.on('SIGUSR2', function(){
-  shutdown().then(() => {
-    process.kill(process.pid, 'SIGUSR2');
-  });
-});
+function onShutdown () {
+  console.log('cleanup finished, server is shutting down');
+}
 
-//App
-process.on('SIGINT', function(){
-  shutdown().then(() => {
-    process.exit(0);
-  });
-});
-
-//Heroku, kubernetes
-process.on('SIGTERM', function(){
-  shutdown().then(() => {
-    process.exit(0);
-  });
+createTerminus(server, {
+  timeout: 2000,//ms
+  signals:['SIGUSER2', 'SIGINT', 'SIGTERM'],
+  onSignal,
+  onShutdown
 });
 
 /**
