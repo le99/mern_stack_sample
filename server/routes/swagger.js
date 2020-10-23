@@ -5,14 +5,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const swaggerDocument = yaml.safeLoad(fs.readFileSync('./swagger.yaml'));
 
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-
-router.use('/api-docs', swaggerUi.serve);
-router.get('/api-docs', swaggerUi.setup(swaggerDocument));
+router.use('/', swaggerUi.serve);
+router.get('/', swaggerUi.setup(swaggerDocument));
 
 module.exports = router;
