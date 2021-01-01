@@ -9,7 +9,9 @@ import {
 } from "react-router-dom";
 
 import Test from './components/Test';
-
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+import FormikTest from './components/FormikTest';
 
 function App() {
 
@@ -22,10 +24,10 @@ function App() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/about">About</Link>
+              <Link to="/signup">SignUp</Link>
             </li>
             <li>
-              <Link to="/users">Users</Link>
+              <Link to="/signin">SignIn</Link>
             </li>
           </ul>
         </nav>
@@ -33,11 +35,11 @@ function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/about">
-            <h1>about</h1>
+          <Route path="/signup">
+            <SignUp />
           </Route>
-          <Route path="/users">
-            <h1>users</h1>
+          <Route path="/signin">
+            <SignIn />
           </Route>
           <Route path="/">
             <h1>/</h1>
