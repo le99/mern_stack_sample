@@ -1,43 +1,51 @@
-import logo from './logo.svg';
 import './App.css';
-import React, { useState } from 'react';
+import React from 'react';
 
-const axios = require('axios').default;
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
+import Test from './components/Test';
 
 
 function App() {
 
-  const [apiResult, setApiResult] = useState("");
-  
-  function onClick() {
-    axios.get('/api/').then((res)=>{
-      setApiResult(JSON.stringify(res.data));
-    })
-  }
+  return(
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/users">Users</Link>
+            </li>
+          </ul>
+        </nav>
 
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <button onClick={() => {onClick()}}>
-          Call API
-        </button>
-        <h2>Result: {apiResult}</h2>
-      </header>
-    </div>
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/about">
+            <h1>about</h1>
+          </Route>
+          <Route path="/users">
+            <h1>users</h1>
+          </Route>
+          <Route path="/">
+            <h1>/</h1>
+            <Test />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
