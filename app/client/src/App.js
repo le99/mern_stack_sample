@@ -8,10 +8,10 @@ import {
   Link
 } from "react-router-dom";
 
-import Test from './components/Test';
+// import Test from './components/Test';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
-import FormikTest from './components/FormikTest';
+import Home from './components/blog/Blog';
 
 function App() {
 
@@ -42,8 +42,8 @@ function App() {
             <SignIn />
           </Route>
           <Route path="/">
-            <h1>/</h1>
-            <Test />
+            <Home />
+            {/* <Test /> */}
           </Route>
         </Switch>
       </div>
