@@ -18,27 +18,13 @@ function App() {
   return(
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/signup">SignUp</Link>
-            </li>
-            <li>
-              <Link to="/signin">SignIn</Link>
-            </li>
-          </ul>
-        </nav>
-
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
           <Route path="/signup">
             <SignUp />
           </Route>
-          <Route path="/signin">
+          <Route path="/login">
             <SignIn />
           </Route>
           <Route path="/">
