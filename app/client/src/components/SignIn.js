@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Navbar from './Navbar';
 
@@ -70,7 +71,10 @@ export default function SignIn() {
       password: Yup.string().required('Required')
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
+      setTimeout(()=>{
+        history.push('/dashboard')
+      }, 2000)
     },
   });
 
@@ -102,6 +106,7 @@ export default function SignIn() {
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
+              disabled={formik.isSubmitting}
             />
             <TextField
               variant="outlined"
@@ -117,17 +122,26 @@ export default function SignIn() {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
+              disabled={formik.isSubmitting}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
+            { formik.isSubmitting &&
+              <Grid container justify='center' xs='12'>
+                <CircularProgress />
+              </Grid>
+            }
+            
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={formik.isSubmitting}
             >
               Sign In
             </Button>

@@ -12,6 +12,7 @@ import {
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Home from './components/blog/Blog';
+import Dashboard from './components/Dashboard';
 
 function App() {
 
@@ -26,6 +27,9 @@ function App() {
           </Route>
           <Route path="/login">
             <SignIn />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
           <Route path="/">
             <Home />
