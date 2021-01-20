@@ -14,13 +14,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Navbar from './Navbar';
 
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { useSelector, useDispatch } from 'react-redux';
-import {loginAsync, selectUsername} from '../redux/loginSlice';
+import {loginAsync, login} from '../redux/authSlice';
 
 function Copyright() {
   return (
@@ -56,6 +56,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
+  let location = useLocation();
+
+  const { from } = location.state || { from: { pathname: "/dashboard" } };
+
+  console.log(from);
+
   const classes = useStyles();
   const history = useHistory();
   function submit(event) {
@@ -74,10 +80,10 @@ export default function SignIn() {
       password: Yup.string().required('Required')
     }),
     onSubmit: (values) => {
-      // alert(JSON.stringify(values, null, 2));
       setTimeout(()=>{
-        dispatch(loginAsync(values.email, values.password));
-        history.push('/dashboard')
+        // dispatch(loginAsync(values.email, values.password));
+        dispatch(login(values.email));
+        history.replace(from);
       }, 1000)
     },
   });

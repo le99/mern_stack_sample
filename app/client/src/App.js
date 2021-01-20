@@ -15,6 +15,18 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Home from './components/blog/Blog';
 import Dashboard from './components/Dashboard';
+import PropTypes from 'prop-types';
+
+import {
+  Link,
+  Redirect,
+  useHistory,
+  useLocation
+} from "react-router-dom";
+
+import { useSelector, useDispatch } from 'react-redux';
+
+import { selectUsername } from './redux/authSlice';
 
 function App() {
 
@@ -28,12 +40,12 @@ function App() {
             <Route path="/signup">
               <SignUp />
             </Route>
-            <Route path="/login">
+            <Route path="/signin">
               <SignIn />
             </Route>
-            <Route path="/dashboard">
+            <PrivateRoute path="/dashboard">
               <Dashboard />
-            </Route>
+            </PrivateRoute>
             <Route path="/">
               <Home />
               {/* <Test /> */}
@@ -43,6 +55,35 @@ function App() {
       </Router>
     </Provider>
   );
+}
+
+
+
+//https://reactrouter.com/web/example/auth-workflow
+function PrivateRoute({ children, ...rest }) {
+  const username = useSelector(selectUsername);
+
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        username ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/signin",
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
+  );
+}
+
+PrivateRoute.propTypes = {
+  children: PropTypes.any
 }
 
 export default App;

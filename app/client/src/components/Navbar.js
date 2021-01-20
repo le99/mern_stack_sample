@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 import { useSelector, useDispatch } from 'react-redux';
-import {loginAsync, selectUsername, logout} from '../redux/loginSlice';
+import {loginAsync, selectUsername, logout} from '../redux/authSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,7 +103,7 @@ export default function Navbar() {
             )
             :
             (
-              <Button color="inherit" onClick={() => {history.push('/login')}}>Login</Button>
+              <Button color="inherit" onClick={() => {history.push('/signin')}}>Sign in</Button>
             )
 
           }
