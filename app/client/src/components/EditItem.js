@@ -51,9 +51,10 @@ function CreateItem(){
       text: Yup.string().required('Required')
     }),
     onSubmit: (values) => {
-      setTimeout(()=>{
-        history.replace('/dashboard');
-      }, 1000);
+      axios.put('/api/' + id, {text: values.text})
+        .then(()=>{
+          history.replace('/dashboard');
+        });
     },
   });
 

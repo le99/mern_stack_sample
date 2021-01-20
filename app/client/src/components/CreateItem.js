@@ -10,6 +10,8 @@ import * as Yup from 'yup';
 import { useHistory, useLocation } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import axios from 'axios';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -30,9 +32,11 @@ function CreateItem(){
       text: Yup.string().required('Required')
     }),
     onSubmit: (values) => {
-      setTimeout(()=>{
-        history.replace('/dashboard');
-      }, 1000);
+
+      axios.post('/api/', {text: values.text})
+        .then((res) =>{
+          history.replace('/dashboard');
+        });
     },
   });
 
