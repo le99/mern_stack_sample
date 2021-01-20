@@ -4,9 +4,11 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
+
+import { Provider } from 'react-redux'
+import store from './redux/store'
 
 // import Test from './components/Test';
 import SignIn from './components/SignIn';
@@ -17,27 +19,29 @@ import Dashboard from './components/Dashboard';
 function App() {
 
   return(
-    <Router>
-      <div>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/signup">
-            <SignUp />
-          </Route>
-          <Route path="/login">
-            <SignIn />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/">
-            <Home />
-            {/* <Test /> */}
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div>
+          {/* A <Switch> looks through its children <Route>s and
+              renders the first one that matches the current URL. */}
+          <Switch>
+            <Route path="/signup">
+              <SignUp />
+            </Route>
+            <Route path="/login">
+              <SignIn />
+            </Route>
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
+            <Route path="/">
+              <Home />
+              {/* <Test /> */}
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </Provider>
   );
 }
 

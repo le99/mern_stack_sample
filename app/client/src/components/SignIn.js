@@ -19,6 +19,8 @@ import { useHistory } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import { useSelector, useDispatch } from 'react-redux';
+import {loginAsync, selectUsername} from '../redux/loginSlice';
 
 function Copyright() {
   return (
@@ -60,6 +62,7 @@ export default function SignIn() {
     event.preventDefault();
 
   }
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -73,8 +76,9 @@ export default function SignIn() {
     onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
       setTimeout(()=>{
+        dispatch(loginAsync(values.email, values.password));
         history.push('/dashboard')
-      }, 2000)
+      }, 1000)
     },
   });
 
@@ -82,7 +86,6 @@ export default function SignIn() {
     <div >
       <Navbar />
       <Container component="main" maxWidth="xs">
-
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -129,8 +132,10 @@ export default function SignIn() {
               label="Remember me"
             /> */}
             { formik.isSubmitting &&
-              <Grid container justify='center' xs='12'>
-                <CircularProgress />
+              <Grid container justify='center' >
+                <Grid item xs={12}>
+                  <CircularProgress />
+                </Grid>
               </Grid>
             }
             

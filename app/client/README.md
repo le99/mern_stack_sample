@@ -3,6 +3,10 @@ https://reactjs.org/
 https://reactrouter.com/web/guides/quick-start
 https://material-ui.com/getting-started/usage/
 
+https://redux-toolkit.js.org/
+https://react-redux.js.org/
+https://redux.js.org/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

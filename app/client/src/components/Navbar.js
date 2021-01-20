@@ -5,6 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import {AppBar, Toolbar, IconButton} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu';
 import { useHistory }from 'react-router-dom';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+
+import { useSelector, useDispatch } from 'react-redux';
+import {loginAsync, selectUsername, logout} from '../redux/loginSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +29,28 @@ export default function Navbar() {
   const classes = useStyles();
   const history = useHistory();
 
+  const dispatch = useDispatch();
+  const username = useSelector(selectUsername);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+
+  const open = Boolean(anchorEl);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+    dispatch(logout());
+    history.push('/');
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -30,10 +58,55 @@ export default function Navbar() {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title} onClick={() => {history.push('/')}}>
-            App
-          </Typography>
-          <Button color="inherit" onClick={() => {history.push('/login')}}>Login</Button>
+          {username
+            ?
+            <Typography variant="h6" className={classes.title} onClick={() => {history.push('/dashboard')}}>
+              App
+            </Typography>
+            :
+            <Typography variant="h6" className={classes.title} onClick={() => {history.push('/')}}>
+              App
+            </Typography>
+          }
+
+          {username
+            ?(
+              <div>
+                <Button
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                  endIcon={<AccountCircle />}
+                >
+                  {username}
+                </Button>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </div>
+            )
+            :
+            (
+              <Button color="inherit" onClick={() => {history.push('/login')}}>Login</Button>
+            )
+
+          }
         </Toolbar>
       </AppBar>
     </div>
