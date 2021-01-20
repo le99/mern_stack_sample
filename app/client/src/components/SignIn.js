@@ -82,7 +82,7 @@ export default function SignIn() {
         // dispatch(loginAsync(values.email, values.password));
         dispatch(login(values.email));
         history.replace(from);
-      }, 1000)
+      }, 1000);
     },
   });
 

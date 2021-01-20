@@ -16,6 +16,8 @@ import Container from '@material-ui/core/Container';
 import Navbar from './Navbar';
 
 import { useHistory } from "react-router-dom";
+import { login} from '../redux/authSlice';
+import { useDispatch } from 'react-redux';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -57,6 +59,7 @@ export default function SignUp() {
   const classes = useStyles();
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -72,7 +75,10 @@ export default function SignUp() {
       password: Yup.string().required('Required')
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      setTimeout(()=>{
+        dispatch(login(values.email));
+        history.replace('/dashboard');
+      }, 1000)
     },
   });
 
@@ -104,6 +110,7 @@ export default function SignUp() {
                   onChange={formik.handleChange}
                   error={formik.touched.firstName && Boolean(formik.errors.firstName)}
                   helperText={formik.touched.firstName && formik.errors.firstName}
+                  disabled={formik.isSubmitting}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -119,6 +126,7 @@ export default function SignUp() {
                   onChange={formik.handleChange}
                   error={formik.touched.lastName && Boolean(formik.errors.lastName)}
                   helperText={formik.touched.lastName && formik.errors.lastName}
+                  disabled={formik.isSubmitting}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -134,6 +142,7 @@ export default function SignUp() {
                   onChange={formik.handleChange}
                   error={formik.touched.email && Boolean(formik.errors.email)}
                   helperText={formik.touched.email && formik.errors.email}
+                  disabled={formik.isSubmitting}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -150,6 +159,7 @@ export default function SignUp() {
                   onChange={formik.handleChange}
                   error={formik.touched.password && Boolean(formik.errors.password)}
                   helperText={formik.touched.password && formik.errors.password}
+                  disabled={formik.isSubmitting}
                 />
               </Grid>
               {/* <Grid item xs={12}>
@@ -165,6 +175,7 @@ export default function SignUp() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={formik.isSubmitting}
             >
               Sign Up
             </Button>
