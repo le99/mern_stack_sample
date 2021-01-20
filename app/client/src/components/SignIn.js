@@ -60,14 +60,12 @@ export default function SignIn() {
 
   const { from } = location.state || { from: { pathname: "/dashboard" } };
 
-  console.log(from);
-
   const classes = useStyles();
   const history = useHistory();
   function submit(event) {
     event.preventDefault();
-
   }
+  
   const dispatch = useDispatch();
 
   const formik = useFormik({

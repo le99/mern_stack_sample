@@ -17,8 +17,12 @@ import Home from './components/blog/Blog';
 import Dashboard from './components/Dashboard';
 import PrivateRoute from './helpers/PrivateRoute';
 
+import { init } from './redux/authSlice';
+
 function App() {
 
+  store.dispatch(init());
+  
   return(
     <Provider store={store}>
       <Router>

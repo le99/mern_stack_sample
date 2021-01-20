@@ -8,14 +8,22 @@ export const authSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.username = action.payload;
+      localStorage.setItem('auth', state.username);
     },
     logout: (state, action) => {
       state.username = null;
+      localStorage.clear('auth');
     },
+    init: (state, action) => {
+      const username = localStorage.getItem('auth');
+      if(username){
+        state.username = username;
+      }
+    }
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, init } = authSlice.actions;
 
 export const loginAsync = (username, password) => dispatch => {
   setTimeout(() => {
