@@ -16,6 +16,8 @@ import SignUp from './components/SignUp';
 import Home from './components/blog/Blog';
 import Dashboard from './components/Dashboard';
 import PrivateRoute from './helpers/PrivateRoute';
+import CreateItem from './components/CreateItem';
+import EditItem from './components/EditItem';
 
 import { init } from './redux/authSlice';
 
@@ -38,6 +40,12 @@ function App() {
             </Route>
             <PrivateRoute path="/dashboard">
               <Dashboard />
+            </PrivateRoute>
+            <PrivateRoute path="/createItem">
+              <CreateItem />
+            </PrivateRoute>
+            <PrivateRoute path="/editItem/:id">
+              <EditItem />
             </PrivateRoute>
             <Route path="/">
               <Home />
