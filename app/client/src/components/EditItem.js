@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Navbar from './Navbar';
@@ -18,6 +18,8 @@ import {
   useParams
 } from "react-router-dom";
 
+import axios from 'axios';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -31,10 +33,20 @@ function CreateItem(){
   const history = useHistory();
   let { id } = useParams();
 
+  let [ elem, setElem ] = useState(null);
+
+  useEffect(()=>{
+    axios.get('/api/'+id)
+      .then((res) => {
+        setElem(res.data)
+      });
+  }, [id]);
+
   const formik = useFormik({
     initialValues: {
-      text: '',
+      text: (elem)? elem.text: '',
     },
+    enableReinitialize: true,
     validationSchema: Yup.object({
       text: Yup.string().required('Required')
     }),
@@ -52,7 +64,7 @@ function CreateItem(){
         <Grid container className={classes.root} spacing={2} direction="column" jusify="center" alignItems="center">
           <Grid item>
             <Typography variant="h4">
-              Id: {id}
+              Id: {id} {(!elem)? ', Not found': ''}
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -63,7 +75,7 @@ function CreateItem(){
               onChange={formik.handleChange}
               error={formik.touched.text && Boolean(formik.errors.text)}
               helperText={formik.touched.text && formik.errors.text}
-              disabled={formik.isSubmitting}
+              disabled={formik.isSubmitting || !elem}
             />
           </Grid>
 
@@ -82,7 +94,7 @@ function CreateItem(){
                   variant="contained"
                   color="primary"
                   className={classes.submit}
-                  disabled={formik.isSubmitting}
+                  disabled={formik.isSubmitting || !elem}
                 >
                   Save
                 </Button>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Navbar from './Navbar';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +13,8 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import { useHistory, useLocation } from "react-router-dom";
+
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,17 +33,18 @@ function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
 }
 
-
-const todos = [
-  {id: "1", text: "laundry"},
-  {id: "2", text: "cook"},
-  {id: "3", text: "sweep"},
-];
-
 function Dashboard(){
   const classes = useStyles();
   const history = useHistory();
 
+  let [todos, setTodos] = useState([]);
+
+  useEffect(()=>{
+    axios.get('/api/')
+      .then((res) => {
+        setTodos(res.data)
+      })
+  }, []);
 
   function handleItemClick(e){
     history.push('/editItem/'+ e.id);
