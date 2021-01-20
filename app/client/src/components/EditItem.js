@@ -34,12 +34,18 @@ function CreateItem(){
   let { id } = useParams();
 
   let [ elem, setElem ] = useState(null);
+  let [ elemQueried, setElemQueried ] = useState(false);
 
   useEffect(()=>{
     axios.get('/api/'+id)
       .then((res) => {
-        setElem(res.data)
+        setElem(res.data);
+        setElemQueried(true);
+      })
+      .catch(()=>{
+        setElemQueried(false);
       });
+
   }, [id]);
 
   const formik = useFormik({
@@ -65,7 +71,7 @@ function CreateItem(){
         <Grid container className={classes.root} spacing={2} direction="column" jusify="center" alignItems="center">
           <Grid item>
             <Typography variant="h4">
-              Id: {id} {(!elem)? ', Not found': ''}
+              Id: {id} {(elemQueried && !elem)? ', Not found': ''}
             </Typography>
           </Grid>
           <Grid item xs={12}>
