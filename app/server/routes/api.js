@@ -19,9 +19,13 @@ router.post('/', function(req, res) {
 });
 
 router.get('/:id', function(req, res) {
-  res.json(_.find(todos, (e) =>{
+  const elem = _.find(todos, (e) =>{
     return e.id == req.params.id
-  }));
+  });
+  if(!elem){
+    return res.status(404).json({msg: "Not found"});
+  }
+  res.json(elem);
 });
 
 router.put('/:id', function(req, res) {
@@ -33,9 +37,13 @@ router.put('/:id', function(req, res) {
     }
     return e;
   })
-  res.json(_.find(todos, (e) =>{
+  const elem = _.find(todos, (e) =>{
     return e.id == req.params.id
-  }));
+  });
+  if(!elem){
+    return res.status(404).json({msg: "Not found"});
+  }
+  res.json(elem);
 });
 
 router.use('/*', function(req, res){
