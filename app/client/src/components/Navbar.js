@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 import { useSelector, useDispatch } from 'react-redux';
-import {loginAsync, selectUsername, logout} from '../redux/authSlice';
+import { selectUsername, logout} from '../redux/authSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {

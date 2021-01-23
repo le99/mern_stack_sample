@@ -7,16 +7,15 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import axios from 'axios';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     padding: '30px',
-    // backgroundColor: theme.palette.background.paper,
   },
 }));
 
@@ -34,7 +33,7 @@ function CreateItem(){
     onSubmit: (values) => {
 
       axios.post('/api/', {text: values.text})
-        .then((res) =>{
+        .then(() =>{
           history.replace('/dashboard');
         });
     },

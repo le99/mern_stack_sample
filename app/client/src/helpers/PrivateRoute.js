@@ -2,13 +2,10 @@ import React from 'react';
 
 import {
   Route,
-  Link,
   Redirect,
-  useHistory,
-  useLocation
 } from "react-router-dom";
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { selectUsername } from '../redux/authSlice';
 

@@ -17,7 +17,8 @@
     "sourceType": "module"
   },
   "globals": {
-    "localStorage": true
+    "localStorage": true,
+    "window": true
   }
 }
 

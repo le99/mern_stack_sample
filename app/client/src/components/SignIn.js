@@ -19,8 +19,11 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { useSelector, useDispatch } from 'react-redux';
-import {loginAsync, login} from '../redux/authSlice';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/authSlice';
+
+import { useStore } from 'react-redux';
+
 
 function Copyright() {
   return (
@@ -60,10 +63,12 @@ export default function SignIn() {
 
   const { from } = location.state || { from: { pathname: "/dashboard" } };
 
+  const store = useStore();
   const classes = useStyles();
   const history = useHistory();
-  function submit(event) {
-    event.preventDefault();
+
+  if(store.getState().auth.username){
+    history.replace(from);
   }
   
   const dispatch = useDispatch();
@@ -85,6 +90,7 @@ export default function SignIn() {
       }, 1000);
     },
   });
+
 
   return (
     <div >

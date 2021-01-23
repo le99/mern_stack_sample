@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   BrowserRouter as Router,
@@ -7,10 +7,8 @@ import {
   Route
 } from "react-router-dom";
 
-import { Provider } from 'react-redux'
-import store from './redux/store'
+import { useDispatch } from 'react-redux'
 
-// import Test from './components/Test';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Home from './components/blog/Blog';
@@ -19,42 +17,54 @@ import PrivateRoute from './helpers/PrivateRoute';
 import CreateItem from './components/CreateItem';
 import EditItem from './components/EditItem';
 
-import { init } from './redux/authSlice';
+const { setAccount } = require("./redux/authSlice");
+
 
 function App() {
 
-  store.dispatch(init());
+  const dispatch = useDispatch();
+
+  const [, setAcc] = useState(null);
+
+  useEffect(async ()=>{
+    if (typeof window.ethereum !== 'undefined') {
+      window.ethereum.on('accountsChanged', async function (accounts) {
+        const account = accounts[0];
+        dispatch(setAccount(account));
+        setAcc(account);  //Force refresh
+      }); 
+    }
+  }, [])
   
+
   return(
-    <Provider store={store}>
-      <Router>
-        <div>
-          {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/signup">
-              <SignUp />
-            </Route>
-            <Route path="/signin">
-              <SignIn />
-            </Route>
-            <PrivateRoute path="/dashboard">
-              <Dashboard />
-            </PrivateRoute>
-            <PrivateRoute path="/createItem">
-              <CreateItem />
-            </PrivateRoute>
-            <PrivateRoute path="/editItem/:id">
-              <EditItem />
-            </PrivateRoute>
-            <Route path="/">
-              <Home />
-              {/* <Test /> */}
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    </Provider>
+    <Router>
+      <div>
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/signup">
+            <SignUp />
+          </Route>
+          <Route path="/signin">
+            <SignIn />
+          </Route>
+          <PrivateRoute path="/dashboard">
+            <Dashboard />
+          </PrivateRoute>
+          <PrivateRoute path="/createItem">
+            <CreateItem />
+          </PrivateRoute>
+          <PrivateRoute path="/editItem/:id">
+            <EditItem />
+          </PrivateRoute>
+          <Route path="/">
+            <Home />
+            {/* <Test /> */}
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
