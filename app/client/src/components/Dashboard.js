@@ -107,7 +107,7 @@ function Dashboard(){
         startIcon={<AddIcon />}
         onClick={()=>{sign()}}
       >
-        Sign: {store.getState().auth.account}
+        Sign: {store.getState().auth.currentAccount}
       </Button>
       <div>{signature}</div>
 

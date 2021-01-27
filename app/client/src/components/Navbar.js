@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUsername, signoutAsync } from '../redux/authSlice';
+import { selectUsername, signoutAsync, signoutAllAsync } from '../redux/authSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +50,12 @@ export default function Navbar() {
     dispatch(signoutAsync());
     history.push('/');
   };
+
+  const handleLogoutAll = () =>{
+    setAnchorEl(null);
+    dispatch(signoutAllAsync());
+    history.push('/');
+  }
 
   return (
     <div className={classes.root}>
@@ -98,6 +104,8 @@ export default function Navbar() {
                   onClose={handleClose}
                 >
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  <MenuItem onClick={handleLogoutAll}>Logout all</MenuItem>
+
                 </Menu>
               </div>
             )
