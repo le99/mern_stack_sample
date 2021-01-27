@@ -39,9 +39,6 @@ function Dashboard(){
   const history = useHistory();
 
   let [todos, setTodos] = useState([]);
-  let [signature, setSignature] = useState('');
-
-  const store = useStore();
 
   useEffect(()=>{
     axios.get('/api/')
@@ -52,19 +49,6 @@ function Dashboard(){
 
   function handleItemClick(e){
     history.push('/editItem/'+ e.id);
-  }
-
-  async function sign(){
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-  
-    try{
-      const signature = await signer.signMessage('hi');
-      setSignature(signature);
-    }
-    catch(e){
-      setSignature('error: ' + e);
-    }
   }
 
   return (
@@ -98,18 +82,6 @@ function Dashboard(){
           </Button>
         </Grid>
       </Grid>
-
-
-      <Button
-        variant="contained"
-        color="primary"
-        className={classes.button}
-        startIcon={<AddIcon />}
-        onClick={()=>{sign()}}
-      >
-        Sign: {store.getState().auth.currentAccount}
-      </Button>
-      <div>{signature}</div>
 
       <Fab color="primary" aria-label="add" className={classes.fab} onClick={()=>{history.push('/createItem')}}>
         <AddIcon />

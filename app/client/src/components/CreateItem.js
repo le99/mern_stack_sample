@@ -10,6 +10,8 @@ import * as Yup from 'yup';
 import { useHistory } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+const { ethers } = require("ethers");
+
 import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
@@ -30,12 +32,20 @@ function CreateItem(){
     validationSchema: Yup.object({
       text: Yup.string().required('Required')
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
 
-      axios.post('/api/', {text: values.text})
-        .then(() =>{
-          history.replace('/dashboard');
-        });
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+    
+      let payload = JSON.stringify({text: values.text});
+      try{
+        const signature = await signer.signMessage(payload);
+        await axios.post('/api/', {payload, signature});
+        history.replace('/dashboard');
+      }
+      catch(e){
+        console.log(e);
+      }
     },
   });
 

@@ -13,8 +13,15 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
+
+  let signature = req.body.signature;
+  if(!signature){
+    return res.status(400).json({msg:"no signature"})
+  }
+
+  let content = JSON.parse(req.body.payload);
   const newId = _.max(todos, (e) => {return e.id}).id + 1;
-  todos.push({id: newId, text: req.body.text});
+  todos.push({id: newId, text: content.text});
   return res.json(todos[todos.length - 1]); 
 });
 
