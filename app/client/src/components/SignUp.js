@@ -14,7 +14,7 @@ import Container from '@material-ui/core/Container';
 import Navbar from './Navbar';
 
 import { useHistory } from "react-router-dom";
-import { login} from '../redux/authSlice';
+import { signupAsync } from '../redux/authSlice';
 import { useDispatch } from 'react-redux';
 
 import { useFormik } from 'formik';
@@ -73,10 +73,10 @@ export default function SignUp() {
       password: Yup.string().required('Required')
     }),
     onSubmit: (values) => {
-      setTimeout(()=>{
-        dispatch(login(values.email));
-        history.replace('/dashboard');
-      }, 1000)
+      dispatch(signupAsync(values.email, values.firstName, values.password))
+        .then(() => {
+          history.replace('/dashboard');
+        });
     },
   });
 

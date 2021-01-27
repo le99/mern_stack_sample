@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUsername, logout} from '../redux/authSlice';
+import { selectUsername, signoutAsync } from '../redux/authSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,7 +47,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    dispatch(logout());
+    dispatch(signoutAsync());
     history.push('/');
   };
 

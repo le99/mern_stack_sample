@@ -20,7 +20,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { useDispatch } from 'react-redux';
-import { login } from '../redux/authSlice';
+import { signinAsync } from '../redux/authSlice';
 
 import { useStore } from 'react-redux';
 
@@ -83,11 +83,10 @@ export default function SignIn() {
       password: Yup.string().required('Required')
     }),
     onSubmit: (values) => {
-      setTimeout(()=>{
-        // dispatch(loginAsync(values.email, values.password));
-        dispatch(login(values.email));
-        history.replace(from);
-      }, 1000);
+      dispatch(signinAsync(values.email, values.password))
+        .then(() =>{
+          history.replace(from);
+        });
     },
   });
 

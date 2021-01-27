@@ -17,7 +17,7 @@ import PrivateRoute from './helpers/PrivateRoute';
 import CreateItem from './components/CreateItem';
 import EditItem from './components/EditItem';
 
-const { setAccount } = require("./redux/authSlice");
+const { setCurrentAccountAsync } = require("./redux/authSlice");
 
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
     if (typeof window.ethereum !== 'undefined') {
       window.ethereum.on('accountsChanged', async function (accounts) {
         const account = accounts[0];
-        dispatch(setAccount(account));
+        dispatch(setCurrentAccountAsync(account));
         setAcc(account);  //Force refresh
       }); 
     }
