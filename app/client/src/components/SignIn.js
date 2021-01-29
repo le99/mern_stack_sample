@@ -82,11 +82,22 @@ export default function SignIn() {
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string().required('Required')
     }),
-    onSubmit: (values) => {
-      dispatch(signinAsync(values.email, values.password))
-        .then(() =>{
-          history.replace(from);
-        });
+    onSubmit: (values, {setStatus}) => {
+      try{
+        dispatch(signinAsync(values.email, values.password))
+          .then(() =>{
+            history.replace(from);
+          });
+      }
+      catch(e){
+        let error;
+        if(e.response){
+          error = JSON.stringify(e.response.data);
+        }else{
+          error = e.message;
+        }
+        setStatus({error});
+      }
     },
   });
 
@@ -148,6 +159,15 @@ export default function SignIn() {
               </Grid>
             }
             
+            { formik.status &&
+              <Grid container justify='center' >
+                <Grid item xs={12}>
+                  <Typography variant="body1" color="error">
+                    { formik.status.error }
+                  </Typography>
+                </Grid>
+              </Grid>
+            }
 
             <Button
               type="submit"

@@ -51,11 +51,23 @@ function CreateItem(){
     validationSchema: Yup.object({
       text: Yup.string().required('Required')
     }),
-    onSubmit: (values) => {
-      axios.put('/api/' + id, {text: values.text})
-        .then(()=>{
-          history.replace('/dashboard');
-        });
+    onSubmit: (values, {setStatus}) => {
+      try{
+        axios.put('/api/' + id, {text: values.text})
+          .then(()=>{
+            history.replace('/dashboard');
+          });
+      }
+      catch(e){
+        let error;
+        if(e.response){
+          error = JSON.stringify(e.response.data);
+        }else{
+          error = e.message;
+        }
+        setStatus({error});
+      }
+
     },
   });
 
@@ -84,6 +96,14 @@ function CreateItem(){
           { formik.isSubmitting &&
             <Grid item xs={12}>
               <CircularProgress />
+            </Grid>
+          }
+
+          { formik.status &&
+            <Grid item xs={12}>
+              <Typography variant="body1" color="error">
+                { formik.status.error }
+              </Typography>
             </Grid>
           }
 

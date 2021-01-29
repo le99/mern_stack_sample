@@ -9,6 +9,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 
 const { ethers } = require("ethers");
 
@@ -32,7 +33,7 @@ function CreateItem(){
     validationSchema: Yup.object({
       text: Yup.string().required('Required')
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, {setStatus}) => {
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
@@ -50,7 +51,13 @@ function CreateItem(){
         history.replace('/dashboard');
       }
       catch(e){
-        console.log(e);
+        let error;
+        if(e.response){
+          error = JSON.stringify(e.response.data);
+        }else{
+          error = e.message;
+        }
+        setStatus({error});
       }
     },
   });
@@ -75,6 +82,14 @@ function CreateItem(){
           { formik.isSubmitting &&
             <Grid item xs={12}>
               <CircularProgress />
+            </Grid>
+          }
+
+          { formik.status &&
+            <Grid item xs={12}>
+              <Typography variant="body1" color="error">
+                { formik.status.error }
+              </Typography>
             </Grid>
           }
 
@@ -107,6 +122,7 @@ function CreateItem(){
               </Grid>
             </Grid>
           </Grid>
+
         </Grid>
       </form>
     </React.Fragment>

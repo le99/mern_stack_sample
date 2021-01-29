@@ -72,11 +72,22 @@ export default function SignUp() {
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string().required('Required')
     }),
-    onSubmit: (values) => {
-      dispatch(signupAsync(values.email, values.firstName, values.password))
-        .then(() => {
-          history.replace('/dashboard');
-        });
+    onSubmit: (values, {setStatus}) => {
+      try{
+        dispatch(signupAsync(values.email, values.firstName, values.password))
+          .then(() => {
+            history.replace('/dashboard');
+          });
+      }
+      catch(e){
+        let error;
+        if(e.response){
+          error = JSON.stringify(e.response.data);
+        }else{
+          error = e.message;
+        }
+        setStatus({error});
+      }
     },
   });
 
@@ -167,6 +178,17 @@ export default function SignUp() {
                 />
               </Grid> */}
             </Grid>
+
+            { formik.status &&
+              <Grid container justify='center' >
+                <Grid item xs={12}>
+                  <Typography variant="body1" color="error">
+                    { formik.status.error }
+                  </Typography>
+                </Grid>
+              </Grid>
+            }
+
             <Button
               type="submit"
               fullWidth
