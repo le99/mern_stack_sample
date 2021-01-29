@@ -17,17 +17,11 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
 
-  let {signature, payload, publickey} = req.body;
+  let {signature, payload} = req.body;
   if(!signature){
     return res.status(400).json({msg:"no signature"})
   }
-
-  const hashEthers = ethers.utils.hashMessage(payload);
-  const recoveredPubKeyUncompressed = ethers.utils.recoverPublicKey(hashEthers, signature);
-  const recoveredPubKey = ethers.utils.computePublicKey(
-    recoveredPubKeyUncompressed, true);
-
-  if(publickey != recoveredPubKey){
+  if(!isValidSignature(req)){
     return res.status(400).json({msg:"bad signature"})
   }
 
@@ -49,10 +43,17 @@ router.get('/:id', function(req, res) {
 
 router.put('/:id', function(req, res) {
 
-  console.log(req.body);
+  let {signature, payload} = req.body;
+  if(!signature){
+    return res.status(400).json({msg:"no signature"})
+  }
+  if(!isValidSignature(req)){
+    return res.status(400).json({msg:"bad signature"})
+  }
+  let content = JSON.parse(payload);
   todos = _.map(todos, e => {
     if(e.id == req.params.id){
-      return {...e, text: req.body.text}
+      return {...e, text: content.text}
     }
     return e;
   })
@@ -70,3 +71,18 @@ router.use('/*', function(req, res){
 });
 
 module.exports = router;
+
+
+function isValidSignature(req){
+
+  const {signature, payload, publickey} = req.body;
+  if(!signature || !payload || !publickey){
+    return false;
+  }
+  const hashEthers = ethers.utils.hashMessage(payload);
+  const recoveredPubKeyUncompressed = ethers.utils.recoverPublicKey(hashEthers, signature);
+  const recoveredPubKey = ethers.utils.computePublicKey(
+    recoveredPubKeyUncompressed, true);
+
+  return publickey === recoveredPubKey;
+}

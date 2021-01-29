@@ -14,6 +14,8 @@ import {
   useParams
 } from "react-router-dom";
 
+const { ethers } = require("ethers");
+
 import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
@@ -51,12 +53,21 @@ function CreateItem(){
     validationSchema: Yup.object({
       text: Yup.string().required('Required')
     }),
-    onSubmit: (values, {setStatus}) => {
+    onSubmit: async (values, {setStatus}) => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+    
+      let payload = JSON.stringify({text: values.text});
+
       try{
-        axios.put('/api/' + id, {text: values.text})
-          .then(()=>{
-            history.replace('/dashboard');
-          });
+        const signature = await signer.signMessage(payload);
+        
+        const hashEthers = ethers.utils.hashMessage(payload);
+        const fromEthersToEthersRecoveredPubKeyUncompressed = ethers.utils.recoverPublicKey(hashEthers, signature);
+        const fromEthersToEthersRecoveredPubKey = ethers.utils.computePublicKey(fromEthersToEthersRecoveredPubKeyUncompressed, true);
+
+        await axios.put('/api/' + id, {payload, signature, publickey: fromEthersToEthersRecoveredPubKey});
+        history.replace('/dashboard');
       }
       catch(e){
         let error;

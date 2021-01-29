@@ -82,7 +82,7 @@ export default function SignIn() {
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string().required('Required')
     }),
-    onSubmit: (values, {setStatus}) => {
+    onSubmit: async (values, {setStatus}) => {
       try{
         dispatch(signinAsync(values.email, values.password))
           .then(() =>{
