@@ -40,7 +40,13 @@ function CreateItem(){
       let payload = JSON.stringify({text: values.text});
       try{
         const signature = await signer.signMessage(payload);
-        await axios.post('/api/', {payload, signature});
+        
+        const hashEthers = ethers.utils.hashMessage(payload);
+        const fromEthersToEthersRecoveredPubKeyUncompressed = ethers.utils.recoverPublicKey(hashEthers, signature);
+        const fromEthersToEthersRecoveredPubKey = ethers.utils.computePublicKey(fromEthersToEthersRecoveredPubKeyUncompressed, true);
+
+
+        await axios.post('/api/', {payload, signature, publickey: fromEthersToEthersRecoveredPubKey});
         history.replace('/dashboard');
       }
       catch(e){

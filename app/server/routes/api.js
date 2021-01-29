@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var _ = require('underscore');
 
+const { ethers } = require("ethers");
+
+
 let todos = [
   {id: 10, text: "laundry"},
   {id: 12, text: "cook"},
@@ -14,12 +17,21 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
 
-  let signature = req.body.signature;
+  let {signature, payload, publickey} = req.body;
   if(!signature){
     return res.status(400).json({msg:"no signature"})
   }
 
-  let content = JSON.parse(req.body.payload);
+  const hashEthers = ethers.utils.hashMessage(payload);
+  const recoveredPubKeyUncompressed = ethers.utils.recoverPublicKey(hashEthers, signature);
+  const recoveredPubKey = ethers.utils.computePublicKey(
+    recoveredPubKeyUncompressed, true);
+
+  if(publickey != recoveredPubKey){
+    return res.status(400).json({msg:"bad signature"})
+  }
+
+  let content = JSON.parse(payload);
   const newId = _.max(todos, (e) => {return e.id}).id + 1;
   todos.push({id: newId, text: content.text});
   return res.json(todos[todos.length - 1]); 
